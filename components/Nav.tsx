@@ -6,14 +6,19 @@ import {signIn, signOut, useSession, getProviders } from 'next-auth/react';
 //making a home logo which navigates to home page "/"
 const Nav = () => {
   const isUserLoggedIn = true;
-
-  const [providers, setProviders ] = useState(null);
-
+  //providers is a state initialized to null
+  //setProviders is a function which can alter the state of providers
+  const [providers,setProviders] = useState(null);
+   const [toggleDropDown, setToggleDropDown] = useState(false);
+  //if providers are gotten, providers is set to the providers
   useEffect(() => {
     const setProviders = async () => {
       const response = await getProviders();
+
+      setProviders(response);
     }
-  })
+    setProviders();
+  }, [])
   return (
     <nav className = "flex-between w-full mb-16 pt-3">
         <Link href='/' className='flex gap-2 flex-center'>
@@ -27,7 +32,6 @@ const Nav = () => {
             <p className="logo_text">Promptopia</p>
       </Link>
 
-      {/* Mobile Navigation */}
       <div className ="sm:flex-hidden">
         {/* conditional where if user is logged in first set of parenthesis
         else, second parenthesis runs which is an empty div */}
@@ -59,9 +63,85 @@ const Nav = () => {
           </div>
         ) : (
           <>
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <button
+                  type="button"
+                  key={provider.name}
+                  onClick={()=> signIn(provider.id)}
+                  className='black_btn'
 
+
+                >
+                  Sign In
+                </button>
+              ))}
           </>
         )}
+      </div>
+
+      {/* mobile navigation */}
+
+      <div className="sm:hidden flex relative">
+        {isUserLoggedIn ?(
+          <div className="flex">
+            {/* this image has on onClick to change states with each click */}
+           <Image
+                src="/assets 2/images/logo.svg"
+                width={37}
+                height={37}
+                className="rouded-full"
+                alt="profile"
+                onClick={() => setToggleDropDown((prev) => !prev)}
+              />
+
+              {toggleDropDown && (
+                <div className="dropdown">
+                  <Link
+                    href="/profile"
+                    className="dropdown_link"
+                    onClick={()=> setToggleDropDown(false)}
+                  >
+                    My Profile
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="dropdown_link"
+                    onClick={()=> setToggleDropDown(false)}
+                  >
+                    Create Prompt
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={()=>{
+                      setToggleDropDown(false);
+                      signOut();
+                    }}
+                    className="mt-5 w-full black_btn"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+          </div>
+        ) : (
+          <>
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <button
+                  type="button"
+                  key={provider.name}
+                  onClick={()=> signIn(provider.id)}
+                  className='black_btn'
+
+
+                >
+                  Sign In
+                </button>
+              ))}
+          </>
+        )}
+
       </div>
     </nav>
   )

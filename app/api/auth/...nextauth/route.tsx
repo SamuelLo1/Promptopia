@@ -5,6 +5,7 @@ import User from '@models/user'
 import { connectToDB } from '@utils/database';
 
 
+//the folder name matters so it can handle authentication
 
 const handler = NextAuth ({
     providers:[
@@ -14,7 +15,10 @@ const handler = NextAuth ({
         })
     ],
 
-
+    //when someone is signed in
+    //User is a schema in mongoDB
+    //finds the email in mongoDB to see if user already exists
+    //returns an updated session object with the id
     async session({ session }){
         const sessionUser = await User.findOne({
             email: session.user.email

@@ -18,7 +18,10 @@ export const connectToDB = async () => {
         })
 
         isConnected = true;
+        //Mongo DB is not working, use a new cluster. 
+        
         console.log('MongoDB connected')
+
     }catch(error){
         console.log(error);
     }

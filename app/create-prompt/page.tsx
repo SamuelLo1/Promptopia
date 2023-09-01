@@ -19,7 +19,7 @@ const CreatePrompt = () => {
     })
     const createPrompt = async (e) => {
       //prevent a reload after submitting
-      e.preventDefualt();
+      e.preventDefault();
       setSubmitting(true);
 
       try{

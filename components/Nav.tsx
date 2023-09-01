@@ -3,6 +3,10 @@ import Link from 'next/link'; //react component to provide client side navigatio
 import Image from 'next/image';
 import {useState, useEffect } from 'react';
 import {signIn, signOut, useSession, getProviders } from 'next-auth/react';
+
+
+
+
 //making a home logo which navigates to home page "/"
 const Nav = () => {
   const {data : session } = useSession();
@@ -19,6 +23,8 @@ const Nav = () => {
     }
     setUpProviders();
   }, [])
+
+ 
   return (
     <nav className = "flex-between w-full mb-16 pt-3">
         <Link href='/' className='flex gap-2 flex-center'>
@@ -45,11 +51,15 @@ const Nav = () => {
                 Create Post
               </Link>
 
+        
               {/*signOUt is a function from next-auth */}
               <button type="button" onClick={()=>signOut()} 
               className="outline_btn">
-                Sign Out
+              
+                   Sign Out
+                
               </button>
+        
 
               {/* profile icon*/}
               <Link href="/profile">

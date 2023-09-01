@@ -2,14 +2,15 @@ import React from 'react'
 import Link from 'next/link';
 
 
-const Form = ({
-  type,
-  post,
-  setPost,
-  submitting,
-  handleSubmit,
-}) => {
+
+const Form = ({ type,post,setPost,submitting,handleSubmit}) => {
+  //clears the user text 
+  const clearText = ()=> setPost({
+    ...post, prompt: '', tag: ''
+  })
+
   return (
+
     <section
       className="w-full
       max-w-full
@@ -47,7 +48,6 @@ const Form = ({
           >
             Your AI Prompt
           </span>
-          {/* text area value is set to whatever the prompt given is */}
           <textarea
             
             value = {post.prompt}
@@ -73,18 +73,49 @@ const Form = ({
 
             </span>
           </span>
-          {/* text area value is set to whatever the prompt given is */}
-          <textarea
+          {/* e.target.value gets the current value of textarea
+            everytime textarea is changed setPost updates post.tag
+           */}
+          <input
             
-            value = {post.prompt}
+            value = {post.tag}
             onChange={(e) => setPost ({...post,
-              prompt: e.target.value 
+              tag: e.target.value 
             })}
-            placeholder= "Write your prompt here..."
+            placeholder= "#tag"
             required
-            className='form_textarea'
+            className='form_input'
           />
         </label>
+
+        <div
+          className='
+            flex-end
+            mx-3
+            mb-5
+            gap-4
+          '
+        >
+          {/* This button refreshes the page somehow */}
+        
+          <button
+            onClick={clearText}
+            className="
+            text-gray-500
+            text-sm
+            "
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
+          >
+            Create
+          </button>
+          
+        </div>
       </form>
     </section>
   )

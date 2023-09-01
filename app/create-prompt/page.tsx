@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 import Form from '@components/Form'
-import Router from 'next/router'
+
 
 
 const CreatePrompt = () => {
@@ -25,27 +25,25 @@ const CreatePrompt = () => {
       try{
         //passing all the data in the body to the api endpoint
         //using Post req
-        const response = await fetch('/api/prompt/new', {
-          method: 'POST',
+        const response = await fetch("/api/prompt/new", {
+          method: "POST",
           body: JSON.stringify({
-            prompt:post.prompt,
+            prompt: post.prompt,
             userId: session?.user.id,
-            tag: post.tag
-          })
-        })
-
-        if(response.ok) {
-          router.push('/');
+            tag: post.tag,
+          }),
+        });
+  
+        if (response.ok) {
+          router.push("/");
         }
-        
-      } catch(error) {
-        console.log(error)
+      } catch (error) {
+        console.log(error);
       } finally {
-        //finally sets the state even if there is error or none to false after
         setSubmitting(false);
       }
-
-    }
+  };
+  
   return (
     <Form
         type = "Create"
@@ -57,7 +55,7 @@ const CreatePrompt = () => {
     >
         
     </Form>
-  )
-}
+  );
+};
 
 export default CreatePrompt

@@ -37,7 +37,7 @@ const Nav = () => {
           {/* conditional where if user is logged in first set of parenthesis
           else, second parenthesis runs which is an empty div */}
           {/*checks if user is logged in before rendering TSX elements*/}
-          {isUserloggedIn ?(
+          {session?.user ?(
             <div className ="flex gap-3 md:gap-5">
               
               <Link href="/create-prompt"
@@ -46,7 +46,7 @@ const Nav = () => {
               </Link>
 
               {/*signOUt is a function from next-auth */}
-              <button type="button" onClick={signOut} 
+              <button type="button" onClick={()=>signOut()} 
               className="outline_btn">
                 Sign Out
               </button>
@@ -54,7 +54,7 @@ const Nav = () => {
               {/* profile icon*/}
               <Link href="/profile">
                 <Image
-                  src="/assets 2/images/logo.svg"
+                  src={session?.user.image}
                   width={37}
                   height={37}
                   className="rouded-full"
@@ -65,26 +65,14 @@ const Nav = () => {
             </div>
           ) : (
             <>
-              {providers &&
-                Object.values(providers).map((provider) => (
-                 
+             
                   <button
                     type="button"
-                    
-                    onClick={()=> signIn(provider.id)}
+                    onClick={()=> signIn('google')}
                     className='mt-5 w-full black_btn'
-
-
                   >
                     Sign In
                   </button>
-                ))}
-                 <button
-                  className ='mt-5 w-full black_btn'
-                  type='button'
-                >
-                  Sign In
-                </button>
             </>
           )}
         </div>
@@ -93,7 +81,7 @@ const Nav = () => {
 
         <div className="sm:hidden flex relative">
           
-          {isUserloggedIn ?(
+          {session?.user ?(
             <div className="flex">
               {/* this image has on onClick to change states with each click */}
             <Image
@@ -115,7 +103,7 @@ const Nav = () => {
                       My Profile
                     </Link>
                     <Link
-                      href="/profile"
+                      href='/create-prompt'
                       className="dropdown_link"
                       onClick={()=> setToggleDropDown(false)}
                     >

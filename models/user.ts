@@ -17,7 +17,12 @@ const UserSchema = new Schema({
     },
     image: {
         type: String,
-    }
+    }, 
+    savedPrompts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Prompt',
+    }],
+    
 });
 
 //checks if a schema of User already exists and if not it creates a model named "User"

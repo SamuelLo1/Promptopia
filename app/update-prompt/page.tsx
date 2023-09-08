@@ -12,6 +12,7 @@ const EditPrompt = () => {
     const searchParams = useSearchParams();
 
     const promptId= searchParams.get('id');
+    console.log("PromptId: ", promptId)
     //check if user is submitting
     const [submitting, setSubmitting] = useState(false);
     //check if user is posting
@@ -22,7 +23,7 @@ const EditPrompt = () => {
 
     useEffect(()=>{
         const getPromptDetails = async () =>{
-          const response = await fetch('/api/prompt/${promptId}')
+          const response = await fetch(`/api/prompt/${promptId}`)
           const data = await response.json();
           
           //update the post with edited value
@@ -30,30 +31,34 @@ const EditPrompt = () => {
             prompt: data.prompt,
             tag: data.tag,
           })
+
+          
+
         }
 
         if (promptId) getPromptDetails()
     }, [promptId])
-    /*
-    const createPrompt = async (e) => {
+    
+    const updatePrompt = async (e) => {
       //prevent a reload after submitting
       e.preventDefault();
       setSubmitting(true);
+      
+      if(!promptId) return alert(`Prompt Id not found`); 
 
       try{
         //passing all the data in the body to the api endpoint
         //using Post req
-        const response = await fetch("/api/prompt/new", {
-          method: "POST",
+        const response = await fetch(`/api/prompt/${promptId}`, {
+          method: "PATCH",
           body: JSON.stringify({
             prompt: post.prompt,
-            userId: session?.user.id,
             tag: post.tag,
           }),
         });
   
         if (response.ok) {
-          router.push("/");
+          router.push('/');
         }
       } catch (error) {
         console.log(error);
@@ -61,7 +66,7 @@ const EditPrompt = () => {
         setSubmitting(false);
       }
   };
-  */
+  
 
   return (
     <Form
@@ -69,7 +74,7 @@ const EditPrompt = () => {
         post = { post }
         setPost = {setPost}
         submitting = { submitting }
-        handleSubmit = {()=>{} }
+        handleSubmit = {updatePrompt }
 
     >
         

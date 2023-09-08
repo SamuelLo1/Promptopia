@@ -9,9 +9,9 @@ import Form from '@components/Form'
 
 const EditPrompt = () => {
     const router = useRouter();
-    const { data: session } = useSession();
     const searchParams = useSearchParams();
-    const promptId= searchParams.get('Id');
+
+    const promptId= searchParams.get('id');
     //check if user is submitting
     const [submitting, setSubmitting] = useState(false);
     //check if user is posting
@@ -21,8 +21,20 @@ const EditPrompt = () => {
     })
 
     useEffect(()=>{
-        
+        const getPromptDetails = async () =>{
+          const response = await fetch('/api/prompt/${promptId}')
+          const data = await response.json();
+          
+          //update the post with edited value
+          setPost({
+            prompt: data.prompt,
+            tag: data.tag,
+          })
+        }
+
+        if (promptId) getPromptDetails()
     }, [promptId])
+    /*
     const createPrompt = async (e) => {
       //prevent a reload after submitting
       e.preventDefault();
@@ -49,14 +61,15 @@ const EditPrompt = () => {
         setSubmitting(false);
       }
   };
-  
+  */
+
   return (
     <Form
-        type = "Create"
+        type = "Edit"
         post = { post }
         setPost = {setPost}
         submitting = { submitting }
-        handleSubmit = { createPrompt }
+        handleSubmit = {()=>{} }
 
     >
         

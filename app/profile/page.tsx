@@ -31,7 +31,20 @@ const myProfile = () => {
   }
 
   const handleDelete = async (post) => {
+    const hasConfirmed = confirm("Are you sure you want to delete this prompt?");
+    try {
+      await fetch(`api/prompt/${post._id.toString()}`, {
+        method: 'DELETE'
+      })
+      //works like map function where it updates the current state of posts to exclude the deleted post
 
+      const filteredPosts = posts.filter((p) => p._id !== post._id)
+
+      setPosts(filteredPosts);
+
+    } catch (error){
+      console.log(error);
+    }
   }
 
   return (

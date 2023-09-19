@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter} from 'next/navigation';
 
-const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
+const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles',
         month: 'numeric',
         day:'numeric',
@@ -31,6 +31,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     navigator.clipboard.writeText(post.prompt)
     setTimeout(() => setCopied(""), 3000); 
   }
+  const handleSave = () => {
+    setCopied(post.prompt);
+    //writes prompt to the system clipboard
+    navigator.clipboard.writeText(post.prompt)
+    setTimeout(() => setCopied(""), 3000); 
+  }
   return (
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>
@@ -50,25 +56,54 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           
             </div>
         </div>
-        <div className='copy_btn' onClick={handleCopy}>
-          <Image
-            src={copied === post.prompt ? 
-              '/assets 2/icons/tick.svg'
-              : '/assets 2/icons/copy.svg'
-            }
-            width={20}
-            height={20}
-          />
-        </div>
+
+          <div className='copy_btn ' onClick={handleCopy}>
+            <Image
+              src={copied === post.prompt ? 
+                '/assets 2/icons/tick.svg'
+                : '/assets 2/icons/copy.svg'
+              }
+              width={20}
+              height={20}
+            />
+          </div>
+
+  
+        
       </div>
       <p className='my-4 font-satoshi text-sm text-gray-300'>
         {post.prompt}
       </p>
-      <p className='font-inter text-sm orange_gradient cursor-pointer'
-        onClick={()=> handleTagClick && handleTagClick}
-      >
-        {post.tag}
-      </p>
+      <div className="flex justify-evenly">
+        <p className='font-inter text-sm orange_gradient cursor-pointer'
+          onClick={()=> handleTagClick && handleTagClick}
+        >
+          {post.tag}
+        </p>
+        
+ {session?.user.id && pathName !== '/profile' && (
+    <div className='copy_btn justify-start-reverse' onClick={handleSave}>
+      <Image
+        src={
+          copied === post.prompt
+            ? '/assets 2/icons/save_fill.svg'
+            : '/assets 2/icons/save_open.svg'
+        }
+        width={20}
+        height={20}
+      />
+    </div>
+  )
+}
+
+
+
+
+
+
+      </div>
+      
+      
       
       {/* Make sure that user owns the post and is on profile page before rendering edit/dete options*/}
       {session?.user.id === post.creator._id && pathName === '/profile' && (

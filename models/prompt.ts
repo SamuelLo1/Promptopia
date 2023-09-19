@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from 'mongoose';
 
 
 const PromptSchema = new Schema({
@@ -23,6 +23,8 @@ const PromptSchema = new Schema({
     date: {
         type: String,
     },
+    saved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+
 });
 
 const Prompt = models.Prompt || model('Prompt', PromptSchema);

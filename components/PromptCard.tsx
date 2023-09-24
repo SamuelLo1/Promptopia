@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter} from 'next/navigation';
@@ -24,6 +24,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   const pathName = usePathname();
   const router = useRouter();
   const [copied, setCopied] = useState("");
+  //update saved state based on if 
 
   const handleCopy = () => {
     setCopied(post.prompt);
@@ -34,6 +35,25 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   const handleSave = () => {
     setCopied(post.prompt);
     //writes prompt to the system clipboard
+
+    //Do this on testing.tsx first
+    //check if user signed in first
+    //make a GET request handler in /saved.route.ts (use userID as url param)
+
+    //Move to saved/page.tsx
+    //Make the GET request tested earlier
+    //GET the posts and pass as data
+
+    //make a patch request to update the saved field with userId from useSession
+    
+    //update a useState
+
+    //based on the state, display the correct icon
+
+    //also need to check how I can add a userId but also remove if it already in the saved array
+
+
+    console.log(post._id);
     navigator.clipboard.writeText(post.prompt)
     setTimeout(() => setCopied(""), 3000); 
   }
@@ -65,6 +85,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
               }
               width={20}
               height={20}
+              alt="copyIcon"
             />
           </div>
 
@@ -91,6 +112,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
         }
         width={20}
         height={20}
+        alt="saveIcon"
       />
     </div>
   )

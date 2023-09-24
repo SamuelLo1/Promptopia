@@ -5,6 +5,7 @@ import PromptCard from "./PromptCard";
 //is used to store the prompts
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
+    
     <div className='mt-16 prompt_layout'>
       {data.map((post) => (
         <PromptCard

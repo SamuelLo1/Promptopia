@@ -19,11 +19,28 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
       return (post.date + " " + post.time);
     }
   }
+  
 
   const {data : session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
   const [copied, setCopied] = useState("");
+  
+  //for checking if post is saved by user
+  const [isSaved, setSaved] = useState(false);
+
+  useEffect(()=>{
+    //if logged in 
+    if (session?.user.id) {
+      //check if saved
+      if (post.saved.includes(session?.user.id)){
+        setSaved(true);
+        console.log("User has saved this post: ", post.prompt);
+      } else {
+        setSaved(false);
+      }
+    }
+  }, [session?.user.id])
   //update saved state based on if 
 
   const handleCopy = () => {
@@ -34,6 +51,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   }
   const handleSave = () => {
     setCopied(post.prompt);
+    
     //writes prompt to the system clipboard
 
     //Do this on testing.tsx first
@@ -43,13 +61,14 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
     //Move to saved/page.tsx
     //Make the GET request tested earlier
     //GET the posts and pass as data
-
+    
+    //WORKING ON THIS
     //make a patch request to update the saved field with userId from useSession
     
     //update a useState
 
     //based on the state, display the correct icon
-
+    
     //also need to check how I can add a userId but also remove if it already in the saved array
 
 
@@ -106,7 +125,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
     <div className='copy_btn justify-start-reverse' onClick={handleSave}>
       <Image
         src={
-          copied === post.prompt
+          isSaved === true
             ? '/assets 2/icons/save_fill.svg'
             : '/assets 2/icons/save_open.svg'
         }

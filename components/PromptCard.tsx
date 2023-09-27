@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter} from 'next/navigation';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles',
@@ -29,6 +31,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   //for checking if post is saved by user
   const [isSaved, setSaved] = useState(false);
 
+  //check if user has saved
   useEffect(()=>{
     //if logged in 
     if (session?.user.id) {
@@ -41,41 +44,70 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
       }
     }
   }, [session?.user.id])
-  //update saved state based on if 
 
+  // send a Patch Request to save the post
+  const handleSaved = async ()=>{
+    try {
+      const response = await fetch(`/api/save`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          id: post._id,
+          userId: session?.user.id
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      //update the state of saved based on response
+      const data = await response.json();
+      setSaved(data.isSaved);
+      if(data.isSaved){
+        postSaved();
+      } else {
+        postUnsaved();
+      }
+
+   } catch (error) {
+    console.log("Problem fetching", error);
+   }
+  };
+
+  //update saved state based on if 
+  const postSaved = () => {
+    toast.success('Post saved', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
+  const postUnsaved = () => {
+    toast.success('Post unsaved', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
   const handleCopy = () => {
     setCopied(post.prompt);
     //writes prompt to the system clipboard
-    navigator.clipboard.writeText(post.prompt)
+    navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000); 
   }
-  const handleSave = () => {
-    setCopied(post.prompt);
-    
-    //writes prompt to the system clipboard
-
-    //Do this on testing.tsx first
-    //check if user signed in first
-    //make a GET request handler in /saved.route.ts (use userID as url param)
-
-    //Move to saved/page.tsx
-    //Make the GET request tested earlier
-    //GET the posts and pass as data
-    
-    //WORKING ON THIS
-    //make a patch request to update the saved field with userId from useSession
-    
-    //update a useState
-
-    //based on the state, display the correct icon
-    
-    //also need to check how I can add a userId but also remove if it already in the saved array
-
-
-    console.log(post._id);
-    navigator.clipboard.writeText(post.prompt)
-    setTimeout(() => setCopied(""), 3000); 
-  }
+ 
   return (
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>
@@ -122,7 +154,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
         </p>
         
  {session?.user.id && pathName !== '/profile' && (
-    <div className='copy_btn justify-start-reverse' onClick={handleSave}>
+    <div className='copy_btn justify-start-reverse' onClick={handleSaved}>
       <Image
         src={
           isSaved === true

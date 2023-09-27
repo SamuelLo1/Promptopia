@@ -3,7 +3,7 @@ import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
 export const PATCH = async (request) => {
-    const { id, prompt, tag, userId } = await request.json();
+    const { id, userId } = await request.json();
 
     try {
         await connectToDB();
@@ -15,9 +15,6 @@ export const PATCH = async (request) => {
             return new Response("Prompt not found", { status: 404 });
         }
 
-        // Update the prompt with new data
-        existingPrompt.prompt = prompt;
-        existingPrompt.tag = tag;
         //if item is in the saved array remove it
         
         const savedIndex = existingPrompt.saved.indexOf(userId);

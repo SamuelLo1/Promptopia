@@ -1,4 +1,4 @@
-'use client'
+'Use client'
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import Profile from "@components/Profile";
 
-const myProfile = () => {
+const MyProfile = () => {
   const {data : session } = useSession();
   const [posts, setPosts] = useState([]);
   const router = useRouter();
@@ -59,4 +59,4 @@ const myProfile = () => {
   )
 }
 
-export default myProfile
+export default MyProfile

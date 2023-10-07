@@ -153,7 +153,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
           {post.tag}
         </p>
         
- {session?.user.id && pathName !== '/profile' && (
+ {session?.user.id && (
     <div className='copy_btn justify-start-reverse' onClick={handleSaved}>
       <Image
         src={

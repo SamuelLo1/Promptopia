@@ -2,7 +2,7 @@ import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (request) => {
-    const { userId, prompt, tag } = await request.json();
+    const { userId, prompt, tag, response } = await request.json();
     //store time this post was made
     const time = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles',
         hour: 'numeric',
@@ -16,7 +16,8 @@ export const POST = async (request) => {
     });
     try {
         await connectToDB();
-        const newPrompt = new Prompt({ creator: userId, prompt, tag, time, date });
+        console.log(response); 
+        const newPrompt = new Prompt({ creator: userId, prompt, tag, time, date, response});
 
         await newPrompt.save();
         return new Response(JSON.stringify(newPrompt), { status: 201 })

@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import { usePathname} from 'next/navigation';
-
+import Modal from "@components/Modal";
 
 import Saved from "@components/saved";
 
@@ -45,16 +45,23 @@ const myProfile = () => {
   //Need to test framer to allow for animated modal
   //Need to make a function in the promptCard which handles the Modal popup. 
   //First make it static and then make dynamic where cards can each have their own modal
-  return (
-    <section>
-      <Saved
-        name="My"
-        desc = "Welcome to your saved content"
-        data ={posts}
-        handleUnsave={handleUnsave}
-      />
-    </section>
+  // <section>
+  //     <Saved
+  //       name="My"
+  //       desc = "Welcome to your saved content"
+  //       data ={posts}
+  //       handleUnsave={handleUnsave}
+  //     />
+  //   </section>
+  const [isOpen, setIsOpen] = useState(false);
 
+  return (
+    <>
+      <button onClick={()=>setIsOpen(true)}className="px-4 py-3 bg-orange-500 rounded"> Get Modal </button>
+      <Modal open={isOpen} onClose={()=>setIsOpen(false)}>
+        <button className="px-4 py-3 bg-orange-500 rounded"> Inside Modal </button>
+      </Modal>
+    </>
   )
 }
 

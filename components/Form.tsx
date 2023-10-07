@@ -14,7 +14,7 @@ const Form = ({ type,post,setPost,submitting,handleSubmit}) => {
 
 
   const clearText = ()=> setPost({
-    ...post, prompt: '', tag: ''
+    ...post, prompt: '', tag: '', response: ''
   })
 
   return (
@@ -79,9 +79,9 @@ const Form = ({ type,post,setPost,submitting,handleSubmit}) => {
           </span>
           <textarea
             
-            value = {post.prompt}
+            value = {post.response}
             onChange={(e) => setPost ({...post,
-              prompt: e.target.value 
+              response: e.target.value 
             })}
             placeholder= "copy response here"
             required

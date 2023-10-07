@@ -1,11 +1,11 @@
 import PromptCard from "./PromptCard";
 
-const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
+const Saved = ({ name, desc, data,saved  }) => {
   return (
     <div> 
       <section className='w-full'>
         <h1 className='head_text text-left'>
-          <span className='blue_gradient'>{name} Profile</span>
+          <span className='blue_gradient'>{name} Saved</span>
         </h1>
         <p className='desc text-left'>{desc}</p>
 
@@ -14,8 +14,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
             <PromptCard
               key={post._id}
               post={post}
-              handleEdit={() => handleEdit && handleEdit(post)}
-              handleDelete={() => handleDelete && handleDelete(post)}
+              saved={saved}
             />
           ))}
         </div>
@@ -24,4 +23,4 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
   )
 };
 
-export default Profile;
+export default Saved;

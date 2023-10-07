@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter} from 'next/navigation';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
+const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles',
         month: 'numeric',
         day:'numeric',
@@ -19,18 +21,93 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       return (post.date + " " + post.time);
     }
   }
+  
 
   const {data : session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
   const [copied, setCopied] = useState("");
+  
+  //for checking if post is saved by user
+  const [isSaved, setSaved] = useState(false);
 
+  //check if user has saved
+  useEffect(()=>{
+    //if logged in 
+    if (session?.user.id) {
+      //check if saved
+      if (post.saved.includes(session?.user.id)){
+        setSaved(true);
+        console.log("User has saved this post: ", post.prompt);
+      } else {
+        setSaved(false);
+      }
+    }
+  }, [session?.user.id])
+
+  // send a Patch Request to save the post
+  const handleSaved = async ()=>{
+    try {
+      const response = await fetch(`/api/save`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          id: post._id,
+          userId: session?.user.id
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      //update the state of saved based on response
+      const data = await response.json();
+      setSaved(data.isSaved);
+      if(data.isSaved){
+        postSaved();
+      } else {
+        postUnsaved();
+      }
+
+   } catch (error) {
+    console.log("Problem fetching", error);
+   }
+  };
+
+  //update saved state based on if 
+  const postSaved = () => {
+    toast.success('Post saved', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
+  const postUnsaved = () => {
+    toast.success('Post unsaved', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
   const handleCopy = () => {
     setCopied(post.prompt);
     //writes prompt to the system clipboard
-    navigator.clipboard.writeText(post.prompt)
+    navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000); 
   }
+ 
   return (
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>
@@ -50,25 +127,56 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           
             </div>
         </div>
-        <div className='copy_btn' onClick={handleCopy}>
-          <Image
-            src={copied === post.prompt ? 
-              '/assets 2/icons/tick.svg'
-              : '/assets 2/icons/copy.svg'
-            }
-            width={20}
-            height={20}
-          />
-        </div>
+
+          <div className='copy_btn ' onClick={handleCopy}>
+            <Image
+              src={copied === post.prompt ? 
+                '/assets 2/icons/tick.svg'
+                : '/assets 2/icons/copy.svg'
+              }
+              width={20}
+              height={20}
+              alt="copyIcon"
+            />
+          </div>
+
+  
+        
       </div>
       <p className='my-4 font-satoshi text-sm text-gray-300'>
         {post.prompt}
       </p>
-      <p className='font-inter text-sm orange_gradient cursor-pointer'
-        onClick={()=> handleTagClick && handleTagClick}
-      >
-        {post.tag}
-      </p>
+      <div className="flex justify-evenly">
+        <p className='font-inter text-sm orange_gradient cursor-pointer'
+          onClick={()=> handleTagClick && handleTagClick}
+        >
+          {post.tag}
+        </p>
+        
+ {session?.user.id && pathName !== '/profile' && (
+    <div className='copy_btn justify-start-reverse' onClick={handleSaved}>
+      <Image
+        src={
+          isSaved === true
+            ? '/assets 2/icons/save_fill.svg'
+            : '/assets 2/icons/save_open.svg'
+        }
+        width={20}
+        height={20}
+        alt="saveIcon"
+      />
+    </div>
+  )
+}
+
+
+
+
+
+
+      </div>
+      
+      
       
       {/* Make sure that user owns the post and is on profile page before rendering edit/dete options*/}
       {session?.user.id === post.creator._id && pathName === '/profile' && (

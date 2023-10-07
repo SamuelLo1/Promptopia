@@ -1,10 +1,12 @@
 'use client'
 import { useState, useEffect } from "react"
 import PromptCard from "./PromptCard";
+import { ToastContainer } from "react-toastify";
 
 //is used to store the prompts
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
+    
     <div className='mt-16 prompt_layout'>
       {data.map((post) => (
         <PromptCard
@@ -53,6 +55,7 @@ const Feed = () => {
         data={posts}
         handleTagClick={()=> {}}
       />
+      <ToastContainer />
     </section>
   )
 }

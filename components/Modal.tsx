@@ -13,18 +13,22 @@ const MODAL_STYLES = {
     zIndex: 111,
     width: '70%', // Set the width to 80% of the viewport width
     maxHeight: '80%', // Set the maximum height to 80% of the viewport height
-    overflow: 'auto'
+    overflow: 'auto',
+    pointerEvents: 'auto',
 }
 
 const OVERLAY = {
-    position: 'fixed',
-    top: 0,
-    left: 0, 
-    right: 0, 
-    bottom: 0, 
-    backgroundColor: 'rgba(0,0,0, .7)', 
-    zIndex: 100
+  position: 'fixed',
+  top: 0,
+  left: 0, 
+  right: 0, 
+  bottom: 0, 
+  backgroundColor: 'rgba(0,0,0, .7)', 
+  zIndex: 100,
+  pointerEvents: 'none', 
+  // Disable pointer events on the overlay
 }
+
 
 export default function Modal({ open, children, onClose }) {
     if (!open) return null;

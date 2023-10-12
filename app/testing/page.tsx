@@ -91,7 +91,7 @@ const myProfile = () => {
       <button onClick={()=>setIsOpen(true)}className="px-4 py-3 bg-orange-500 rounded"> Get Modal </button>
       <Modal  open={isOpen} onClose={()=>setIsOpen(false)} >
         <div className="overflow-auto	">
-          <AiResponse response={response} />
+          <AiResponse response={response}  />
         </div>
       </Modal>
     </>

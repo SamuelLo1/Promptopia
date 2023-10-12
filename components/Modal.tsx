@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import { motion } from 'framer-motion';
-
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const MODAL_STYLES = {
     position: 'fixed',
@@ -11,6 +11,9 @@ const MODAL_STYLES = {
     backgroundColor: '#FFF',
     padding: '50px',
     zIndex: 111,
+    width: '70%', // Set the width to 80% of the viewport width
+    maxHeight: '80%', // Set the maximum height to 80% of the viewport height
+    overflow: 'auto'
 }
 
 const OVERLAY = {
@@ -23,23 +26,47 @@ const OVERLAY = {
     zIndex: 100
 }
 
-export default function Modal({ open, children, onClose}) {
-    //using portals allows the modal to process event delegation
-    // Ex) can console.log(when clicked inside) 
-    if (!open) return null
+export default function Modal({ open, children, onClose }) {
+    if (!open) return null;
+  
     return ReactDom.createPortal(
-      <div style = {OVERLAY} onClick={onClose}>
+      <AnimatePresence>
         {open && (
-            <motion.div Layout className ='card'>
-                <div style={MODAL_STYLES}>
+         
+        <div style={OVERLAY}>
 
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+             >
+              <motion.div layout style={MODAL_STYLES} className="font-medium leading-6 text-base font-inter rounded-md  shadow-2xl">
+                <div className="flex image-hover group justify-end relative" onClick={onClose}>
+                    <Image
+                        src="/assets 2/icons/exitFilled.svg"
+                        width={40}
+                        height={40}
+                        alt="exit"
+                        className="default-image"
+                    />
+                    <Image
+                        src="/assets 2/icons/exit.svg" // Change this to the hover image source
+                        width={40}
+                        height={40}
+                        alt="exit"
+                        className="hover-image"
+                    />       
                     
-                {children} 
                 </div>
+                {children}
+              </motion.div>
             </motion.div>
+        </div>
+         
         )}
-    
-      </div>, 
+      </AnimatePresence>,
       document.getElementById('portal')
-    )
-}
+    );
+  }
+

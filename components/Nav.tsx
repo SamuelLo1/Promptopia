@@ -10,7 +10,6 @@ import {signIn, signOut, useSession, getProviders } from 'next-auth/react';
 //making a home logo which navigates to home page "/"
 const Nav = () => {
   const {data : session } = useSession();
-  const isUserloggedIn = true; 
   //providers is a state initialized to null
   //setProviders is a function which can alter the state of providers
   const [providers, setProviders] = useState(null);

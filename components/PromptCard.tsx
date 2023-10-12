@@ -7,6 +7,8 @@ import { usePathname, useRouter} from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+import AiResponse from "@components/Airesponse";
+import Modal from '@components/Modal';
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsave }) => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles',
@@ -28,6 +30,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsa
   const pathName = usePathname();
   const router = useRouter();
   const [copied, setCopied] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   
   //for checking if post is saved by user
   const [isSaved, setSaved] = useState(false);
@@ -114,6 +118,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsa
   }
  
   return (
+    <>
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>
         <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
@@ -176,10 +181,13 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsa
       }
      
     </div>
+
     <section className="flex flex-center gap-4 border-t border-gray-400 pt-3">
-      <button className="mt-1 bg-transparent text-sm green_gradient font-semibold hover:text-orange-500 py-1 px-5 border border-green-500 rounded hover:border-orange-500">
+
+      <button onClick={()=>setIsOpen(true)} className="mt-1 bg-transparent text-sm green_gradient font-semibold hover:text-orange-500 py-1 px-5 border border-green-500 rounded hover:border-orange-500">
         AI Response 
       </button>
+
     </section>
     {/* Make sure that user owns the post and is on profile page before rendering edit/dete options*/}
     {session?.user.id === post.creator._id && pathName === '/profile' && (
@@ -199,6 +207,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsa
       </div>
     )}
   </div>
+    <Modal open={isOpen} onClose={()=>setIsOpen(false)}>
+      <AiResponse response={post.response} prompt={post.prompt} />
+    </Modal>
+  </>
+
+
   )
 }
 

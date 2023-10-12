@@ -3,7 +3,7 @@ import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-const AiResponse = ({ response }) => {
+const AiResponse = ({ response, prompt }) => {
   const [copiedIndex, setCopiedIndex] = useState(null);
 
   const handleCopy = (index, copyCode) => {
@@ -42,7 +42,15 @@ const AiResponse = ({ response }) => {
     return <section key={index} className="text-gray-700">{textWithLineBreaks}</section>;
   };
 
-  return <div>{parts.map((part, index) => renderPart(part, index))}</div>;
+  return (
+    <>
+      <p className="text-2xl font-bold text-center flex mb-2 mt-2"> Prompt:  </p>
+      <section>{prompt}</section>
+      <p className="text-2xl font-bold text-center flex mb-2 mt-2"> AI Response:  </p>
+
+      <div>{parts.map((part, index) => renderPart(part, index))}</div>
+    </>
+  );
 };
 
 export default AiResponse;

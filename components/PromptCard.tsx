@@ -162,25 +162,6 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsa
         >
           {post.tag}
         </p>
-
-        
-       {session?.user.id && (
-          <div className='copy_btn justify-start-reverse' onClick={handleSaved}>
-            <Image
-              src={
-                isSaved === true
-                  ? '/assets 2/icons/save_fill.svg'
-                  : '/assets 2/icons/save_open.svg'
-              }
-              width={20}
-              height={20}
-              alt="saveIcon"
-            />
-          </div>
-        )
-      }
-
-
       {/* need to try to write an if function to check the path */}
       {session?.user.id  && (
           <div className='copy_btn justify-start-reverse' onClick={handleSaved}>

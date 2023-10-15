@@ -6,8 +6,11 @@ import { useSession } from 'next-auth/react';
 import { usePathname, useRouter} from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
+import AiResponse from "@components/Airesponse";
+import Modal from '@components/Modal';
 
-const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) => {
+const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, handleUnsave }) => {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles',
         month: 'numeric',
         day:'numeric',
@@ -27,6 +30,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   const pathName = usePathname();
   const router = useRouter();
   const [copied, setCopied] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   
   //for checking if post is saved by user
   const [isSaved, setSaved] = useState(false);
@@ -46,6 +51,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   }, [session?.user.id])
 
   // send a Patch Request to save the post
+  // need to filter posts if the route is on saved
+  // also need to figure out how to make the toast notifs only on one page at a time
   const handleSaved = async ()=>{
     try {
       const response = await fetch(`/api/save`, {
@@ -66,9 +73,11 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
       const data = await response.json();
       setSaved(data.isSaved);
       if(data.isSaved){
+
         postSaved();
+
       } else {
-        postUnsaved();
+        postUnsaved(); 
       }
 
    } catch (error) {
@@ -109,6 +118,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
   }
  
   return (
+    <>
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>
         <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
@@ -146,56 +156,62 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, saved }) =
       <p className='my-4 font-satoshi text-sm text-gray-300'>
         {post.prompt}
       </p>
-      <div className="flex justify-evenly">
+      <div className="flex justify-evenly mb-4">
         <p className='font-inter text-sm orange_gradient cursor-pointer'
-          onClick={()=> handleTagClick && handleTagClick}
+          onClick={()=> handleTagClick && handleTagClick(post.tag)}
         >
           {post.tag}
         </p>
-        
- {session?.user.id && (
-    <div className='copy_btn justify-start-reverse' onClick={handleSaved}>
-      <Image
-        src={
-          isSaved === true
-            ? '/assets 2/icons/save_fill.svg'
-            : '/assets 2/icons/save_open.svg'
-        }
-        width={20}
-        height={20}
-        alt="saveIcon"
-      />
+      {/* need to try to write an if function to check the path */}
+      {session?.user.id  && (
+          <div className='copy_btn justify-start-reverse' onClick={handleSaved}>
+            <Image
+              src={
+                isSaved === true
+                  ? '/assets 2/icons/save_fill.svg'
+                  : '/assets 2/icons/save_open.svg'
+              }
+              width={20}
+              height={20}
+              alt="saveIcon"
+            />
+          </div>
+        )
+      }
+     
     </div>
-  )
-}
 
+    <section className="flex flex-center gap-4 border-t border-gray-400 pt-3">
 
+      <button onClick={()=>setIsOpen(true)} className="mt-1 bg-transparent text-sm green_gradient font-semibold hover:text-orange-500 py-1 px-5 border border-green-500 rounded hover:border-orange-500">
+        AI Response 
+      </button>
 
-
-
-
+    </section>
+    {/* Make sure that user owns the post and is on profile page before rendering edit/dete options*/}
+    {session?.user.id === post.creator._id && pathName === '/profile' && (
+      <div className="mt-5 flex-center gap-4 border-t border-gray-400 pt-3">
+        <p 
+          className='font-inter text-sm green_gradient cursor-pointer'
+          onClick={handleEdit}
+        >
+          Edit
+        </p>
+        <p 
+          className='font-inter text-sm orange_gradient cursor-pointer'
+          onClick={handleDelete}
+        >
+          Delete
+        </p>
       </div>
-      
-      
-      
-      {/* Make sure that user owns the post and is on profile page before rendering edit/dete options*/}
-      {session?.user.id === post.creator._id && pathName === '/profile' && (
-        <div className="mt-5 flex-center gap-4 border-t border-gray-400 pt-3">
-          <p 
-            className='font-inter text-sm green_gradient cursor-pointer'
-            onClick={handleEdit}
-          >
-            Edit
-          </p>
-          <p 
-            className='font-inter text-sm orange_gradient cursor-pointer'
-            onClick={handleDelete}
-          >
-            Delete
-          </p>
-        </div>
-      )}
-    </div>
+    )}
+  </div>
+    <Modal open={isOpen} onClose={()=>setIsOpen(false)}>
+      <AiResponse response={post.response} prompt={post.prompt} />
+    </Modal>
+  </>
+
+
   )
 }
 

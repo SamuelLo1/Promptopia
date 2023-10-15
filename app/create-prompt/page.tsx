@@ -15,7 +15,9 @@ const CreatePrompt = () => {
     //check if user is posting
     const [post , setPost] = useState({
         prompt: '',
-        tag: ''
+        tag: '', 
+        response: '',
+        
     })
     const createPrompt = async (e) => {
       //prevent a reload after submitting
@@ -31,6 +33,7 @@ const CreatePrompt = () => {
             prompt: post.prompt,
             userId: session?.user.id,
             tag: post.tag,
+            response: post.response
           }),
         });
   

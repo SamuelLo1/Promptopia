@@ -23,7 +23,11 @@ const PromptSchema = new Schema({
     date: {
         type: String,
     },
+    response: {
+        type: String,
+    },
     saved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    
 
 });
 

@@ -22,6 +22,7 @@ const Rootlayout = ({ children }) => {
                     <Nav />
                     {children}
                 </main>
+                <div id="portal"></div>
             </Provider>
         </body>
     </html>

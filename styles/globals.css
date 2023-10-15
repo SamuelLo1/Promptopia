@@ -168,3 +168,20 @@
 .flex-between {
   @apply flex justify-between items-center;
 }
+
+.image-hover:hover .default-image {
+  display: none;
+}
+
+.image-hover:hover .hover-image {
+  display: block;
+}
+
+.default-image {
+  display: block;
+}
+
+.hover-image {
+  display: none;
+}
+

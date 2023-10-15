@@ -3,10 +3,18 @@ import Link from 'next/link';
 
 
 
+
 const Form = ({ type,post,setPost,submitting,handleSubmit}) => {
   //clears the user text 
+
+  //WIP : 
+  //Need to add a response field 
+  //Need to connect a response part to the prompt in the db prompt model
+ 
+
+
   const clearText = ()=> setPost({
-    ...post, prompt: '', tag: ''
+    ...post, prompt: '', tag: '', response: ''
   })
 
   return (
@@ -55,6 +63,27 @@ const Form = ({ type,post,setPost,submitting,handleSubmit}) => {
               prompt: e.target.value 
             })}
             placeholder= "Write your prompt here..."
+            required
+            className='form_textarea'
+          />
+        </label>
+        <label>
+          <span className="
+            font-satoshi
+            font-semibold
+            text-base
+            text-gray-700
+          "
+          >
+            Copy the AI response
+          </span>
+          <textarea
+            
+            value = {post.response}
+            onChange={(e) => setPost ({...post,
+              response: e.target.value 
+            })}
+            placeholder= "copy response here"
             required
             className='form_textarea'
           />

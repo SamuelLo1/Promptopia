@@ -1,6 +1,6 @@
 import PromptCard from "./PromptCard";
 
-const Saved = ({ name, desc, data,saved  }) => {
+const Saved = ({ name, desc, data, handleUnsave  }) => {
   return (
     <div> 
       <section className='w-full'>
@@ -14,7 +14,8 @@ const Saved = ({ name, desc, data,saved  }) => {
             <PromptCard
               key={post._id}
               post={post}
-              saved={saved}
+              handleUnsave={() => handleUnsave && handleUnsave(post)}
+              
             />
           ))}
         </div>

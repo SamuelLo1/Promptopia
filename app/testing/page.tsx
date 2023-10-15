@@ -12,7 +12,7 @@ import { coldarkDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Saved from "@components/saved";
 import AiResponse from "@components/Airesponse";
 
-const myProfile = () => {
+const MyProfile = () => {
   SyntaxHighlighter.registerLanguage('jsx', jsx);
 
   const {data : session } = useSession();
@@ -98,4 +98,4 @@ const myProfile = () => {
   )
 }
 
-export default myProfile
+export default MyProfile

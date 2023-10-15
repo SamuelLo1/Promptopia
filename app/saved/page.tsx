@@ -9,7 +9,7 @@ import { usePathname} from 'next/navigation';
 
 import Saved from "@components/saved";
 
-const myProfile = () => {
+const MyProfile = () => {
   const {data : session } = useSession();
   const [posts, setPosts] = useState([]);
   const router = useRouter();
@@ -62,4 +62,4 @@ const myProfile = () => {
   )
 }
 
-export default myProfile
+export default MyProfile

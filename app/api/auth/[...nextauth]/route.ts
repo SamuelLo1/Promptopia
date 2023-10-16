@@ -6,6 +6,8 @@ import { connectToDB } from '@utils/database';
 const googleClientId = process.env.GOOGLE_CLIENT_ID || '';
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
 
+//@ts-ignore
+
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -47,3 +49,4 @@ const handler = NextAuth({
 })
 
 export { handler as GET, handler as POST }
+//testing

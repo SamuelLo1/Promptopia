@@ -32,3 +32,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+This is a project that I have learned the basics of NextJS from and expanded upon with quality of life and enhancement features. 
+The application is made to allow multiple users to share AI web prompts on a social media platform. 
+
+Things that I added: 
+  - Each post now has an AI response field which allows users to see the response in a modal that pops out
+  - The AI response formats code in proper syntax using reactSyntaxHighlighter
+  - Each post can be saved by a user and there is a saved page that shows all saved posts
+  - Added quality of life changes to each post including post creation date and time, and Toastify notifications
+ 
